@@ -5,7 +5,6 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import edu.cnm.deepdive.atthemovies.model.Actor;
-import edu.cnm.deepdive.atthemovies.model.Movie;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ import java.util.List;
 public interface ActorDao {
 
     @Insert
-    void insert(Actor actor);
+    long insert(Actor actor);
 
     @Query("SELECT * FROM actor")
     LiveData<List<Actor>> getAll();
