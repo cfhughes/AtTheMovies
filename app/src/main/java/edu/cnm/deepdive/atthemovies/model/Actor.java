@@ -1,12 +1,18 @@
 package edu.cnm.deepdive.atthemovies.model;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity
+@Entity(
+        indices = {
+                @Index(value = "name", unique = true)
+        }
+)
 public class Actor implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -14,6 +20,7 @@ public class Actor implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private Long id;
 
+    @ColumnInfo(collate = ColumnInfo.NOCASE)
     private String name;
 
     public Long getId() {

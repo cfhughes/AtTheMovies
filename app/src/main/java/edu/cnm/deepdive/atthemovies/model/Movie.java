@@ -8,7 +8,10 @@ import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,12 +26,19 @@ public class Movie implements Serializable {
 
     private String screenwriter;
 
-    public enum Genre{
-        HORROR, ACTION, ROMCOM, DOCUMENTARY, ANIME, SCIFI, FANTASY
-    }
+    @TypeConverters(DateConverter.class)
+    private OffsetDateTime timestamp;
 
     @TypeConverters(GenreConverter.class)
     private Genre genre;
+
+    public OffsetDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(OffsetDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public Long getId() {
         return id;
@@ -68,6 +78,10 @@ public class Movie implements Serializable {
         return title + ": " + genre ;
     }
 
+    public enum Genre{
+        HORROR, ACTION, ROMCOM, DOCUMENTARY, ANIME, SCIFI, FANTASY
+    }
+
     public static class GenreConverter {
 
         @TypeConverter
@@ -78,6 +92,21 @@ public class Movie implements Serializable {
         @TypeConverter
         public static String genreToString(Genre genre){
             return genre.name();
+        }
+
+    }
+
+    public static class DateConverter {
+        private static DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+
+        @TypeConverter
+        public static OffsetDateTime longToDate(String value){
+            return value == null ? null : OffsetDateTime.parse(value, formatter);
+        }
+
+        @TypeConverter
+        public static String dateToLong(OffsetDateTime value){
+            return value == null ? null : value.format(formatter);
         }
 
     }
